@@ -7,8 +7,12 @@
 --    c) switches to RTL
 
 -- constants
+-- in ArduSub 
+-- define.h #line 33 
+--
 local copter_guided_mode_num = 4    -- Guided mode is 4 on copter
-local copter_rtl_mode_num = 6       -- RTL is 6 on copter
+local sub_surface = 9       -- SURFACE is 9 on ROV
+
 local circle_radius_rate_max_ms = 1 -- radius expands at max of this many m/s
 local circle_radius_accel_mss = 1   -- radius expansion speed accelerates at this many m/s/s
 local accel_xy = 1                  -- horizontal acceleration in m/s^2
@@ -53,6 +57,8 @@ local yaw_behave = Parameter("FDST_YAW_BEHAVE")        -- 0:yaw is static, 1:yaw
 
 -- the main update function
 function update()
+
+    gcs:send_text(0, string.format("Start Update Method"))
 
   -- update dt
   local now_ms = millis()
@@ -221,7 +227,7 @@ function update()
     gcs:send_text(5, "Fast Descent: done!")
     if (activate_type:get() == 0) then
       -- if activated from Guided change to RTL mode
-      vehicle:set_mode(copter_rtl_mode_num)
+      vehicle:set_mode(sub_surface)
     else
       -- if activated from Auto NAV_SCRIPT_TIME then mark command as done
       vehicle:nav_script_time_done(auto_last_id)
