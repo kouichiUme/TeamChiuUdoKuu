@@ -16,6 +16,31 @@ function update() -- this is the loop which periodically runs
     yaw_rate = 0
   end
 
+  -- 速度設定（うまく行っていない？）
+  local target_vel = Vector3f()
+  target_vel:x(1)
+  target_vel:y(1)
+  target_vel:z(1)
+  if not (vehicle:set_target_velocity_NED(target_vel)) then
+    gcs:send_text(0, "failed to execute velocity command")
+  end
+
+    -- モードの取得
+  local mode = vehicle:get_mode()
+  gcs:send_text(0, string.format("Mode: %s", mode))
+  
+  --　モード変更
+  -- CIRCLE =        7,  // automatic circular flight with automatic throttle
+  if not (mode == 7) then
+  
+    local modeChange = 7
+    vehicle:set_mode(modeChange)
+      
+  end
+
+
+
+
   gcs:send_text(0, string.format("Ang R:%.1f P:%.1f Y:%.1f Rate R:%.1f P:%.1f Y:%.1f", roll, pitch, yaw, roll_rate, pitch_rate, yaw_rate))
   return update, 1000 -- reschedules the loop
 end
