@@ -71,9 +71,13 @@ function update()
 
         -- send velocity request
         -- set_target_velocity_NED returns false because rov does not have that metod
-        if not (vehicle:set_target_velocity_NED(target_vel)) then
-          gcs:send_text(0, "failed to execute velocity command")
-        end
+        -- :set_target_velocity_NED(target_vel)
+        local MOTOR1 = 1
+        local  servochannel = SRV_Channels:find_channel(MOTOR1 )
+
+        SRV_Channels:set_output_pwm(servochannel, 1500)
+        
+        gcs:send_text(0,"servo channel %f",servochannel)
 
       elseif (stage == 4) then  -- Stage4: change to RTL mode
         vehicle:set_mode(copter_rtl_mode_num)
